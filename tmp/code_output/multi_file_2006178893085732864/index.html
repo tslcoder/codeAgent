@@ -1,0 +1,27 @@
+<!-- index.html -->
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任务记录器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <main class="task-container">
+        <h1 class="title">任务记录中心</h1>
+        
+        <form class="task-form" id="task-form">
+            <input type="text" id="task-input" class="task-input" placeholder="输入新任务..." required>
+            <button type="submit" class="btn add-btn">添加任务</button>
+        </form>
+
+        <div class="task-list-container">
+            <ul class="task-list" id="task-list">
+                <!-- 任务项将通过JavaScript动态插入 -->
+            </ul>
+        </div>
+    </main>
+    <script src="script.js"></script>
+</body>
+</html>
