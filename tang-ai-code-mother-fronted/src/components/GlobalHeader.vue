@@ -2,6 +2,10 @@
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
 import type { MenuProps } from 'ant-design-vue'
+import { useLoginUserStore } from '@/stores/loginUser.ts'
+import defaultAvatar from '@/assets/images/defalut-avatar.png'
+//获取用户登陆状态
+const loginUser = useLoginUserStore()
 
 export type HeaderMenuItem = {
   key: string
@@ -53,8 +57,16 @@ const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
       </a-menu-item>
     </a-menu>
     <div class="global-header__right">
-      <!-- 暂时代替用户信息的登录按钮，可接入实际登录逻辑 -->
-      <a-button type="primary">登录</a-button>
+      <!-- 接入实际登陆逻辑 -->
+      <div v-if="loginUser.loginUser.id">
+        <a-space>
+          <a-avatar :src="loginUser.loginUser.userAvatar" />
+          {{ loginUser.loginUser.userName ?? '无名' }}
+        </a-space>
+      </div>
+      <div v-else>
+        <a-button type="primary" href="/user/login">登录</a-button>
+      </div>
     </div>
   </div>
 </template>
