@@ -7,7 +7,8 @@ import GlobalFooter from '@/components/GlobalFooter.vue'
 const menuItems: HeaderMenuItem[] = [
   { key: 'home', label: '首页', path: '/' },
   { key: 'about', label: '关于我们', path: '/about' },
-  { key: 'code', label: '编程导航', href: 'https://www.codefather.cn' }
+  { key: 'code', label: '编程导航', href: 'https://www.codefather.cn' },
+  { key: 'admin', label: '后台管理', path: '/admin/userManage' },
 ]
 </script>
 
