@@ -1,4 +1,4 @@
-package com.tanglin.tangaicodemother.core;
+package com.tanglin.tangaicodemother.core.parser;
 
 import com.tanglin.tangaicodemother.ai.model.HtmlCodeResult;
 

@@ -28,6 +28,11 @@ class AiCodeGeneratorFacadeTest {
 
 
     @Test
+    void generateAndSaveCode() {
+        File savedDir = aiCodeGeneratorFacade.generateAndSaveCode("任务记录网站", CodeGenTypeEnum.MULTI_FILE);
+        assertNotNull(savedDir);
+    }
+    @Test
     void generateAndSaveCodeStream() {
         Flux<String> codeStream = aiCodeGeneratorFacade.generateAndSaveCodeStream("任务记录网站", CodeGenTypeEnum.MULTI_FILE);
         // 阻塞等待所有数据收集完成
