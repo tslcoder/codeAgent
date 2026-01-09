@@ -55,7 +55,7 @@ const handleSubmit = async (values: any) => {
   }
   //登陆失败
   else {
-    message.error('登陆失败' + res.data.message)
+    message.error('登陆失败 ' + res.data.message)
   }
 }
 </script>

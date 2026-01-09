@@ -49,6 +49,7 @@ public class UserServiceImpl extends ServiceImpl<UserMapper, User>  implements U
         }
         // 2. 检查是否重复
         QueryWrapper queryWrapper = QueryWrapper.create();
+        queryWrapper.eq("userAccount", userAccount);
         long count = this.mapper.selectCountByQuery(queryWrapper);
         if (count > 0) {
             throw new BusinessException(ErrorCode.PARAMS_ERROR, "账号重复");

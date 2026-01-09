@@ -1,9 +1,10 @@
 <script setup lang="ts">
 import { computed } from 'vue'
 import { useRoute, useRouter } from 'vue-router'
-import type { MenuProps } from 'ant-design-vue'
+import { type MenuProps, message } from 'ant-design-vue'
 import { useLoginUserStore } from '@/stores/loginUser.ts'
-import defaultAvatar from '@/assets/images/defalut-avatar.png'
+import { LogoutOutlined } from '@ant-design/icons-vue'
+import { userLogout } from '@/api/userController.ts'
 //获取用户登陆状态
 const loginUser = useLoginUserStore()
 
@@ -23,19 +24,44 @@ const props = defineProps<{
 const router = useRouter()
 const route = useRoute()
 
+const visibleMenuItems = computed(() => {
+  const isAdmin = loginUser.loginUser?.userRole === 'admin'
+  return props.menuItems.filter((item) => {
+    if (item.path?.startsWith('/admin')) {
+      return isAdmin
+    }
+    return true
+  })
+})
+
 // 根据当前路由匹配高亮的菜单项
 const selectedKeys = computed(() => {
-  const matched = props.menuItems.find((item) => item.path === route.path)
+  const matched = visibleMenuItems.value.find((item) => item.path === route.path)
   return matched ? [matched.key] : []
 })
 
 // 点击菜单时跳转到对应路由或外部链接
 const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
-  const target = props.menuItems.find((item) => item.key === key)
+  const target = visibleMenuItems.value.find((item) => item.key === key)
   if (target?.path) {
     router.push(target.path)
   } else if (target?.href) {
     window.open(target.href, '_blank')
+  }
+}
+//用户注销
+const doLogOut = async () => {
+  const res = await userLogout()
+  if (res.data.code === 0) {
+    loginUser.setLoginUser({
+      userName: '未登录',
+    })
+    message.success('退出登陆成功')
+    await router.push({
+      path: '/user/login',
+    })
+  } else {
+    message.error('退出登陆失败 ' + res.data.message)
   }
 }
 </script>
@@ -52,17 +78,27 @@ const handleMenuClick: MenuProps['onClick'] = ({ key }) => {
       :selectedKeys="selectedKeys"
       @click="handleMenuClick"
     >
-      <a-menu-item v-for="item in menuItems" :key="item.key">
+      <a-menu-item v-for="item in visibleMenuItems" :key="item.key">
         {{ item.label }}
       </a-menu-item>
     </a-menu>
     <div class="global-header__right">
       <!-- 接入实际登陆逻辑 -->
       <div v-if="loginUser.loginUser.id">
-        <a-space>
-          <a-avatar :src="loginUser.loginUser.userAvatar" />
-          {{ loginUser.loginUser.userName ?? '无名' }}
-        </a-space>
+        <a-dropdown>
+          <a-space>
+            <a-avatar :src="loginUser.loginUser.userAvatar" />
+            {{ loginUser.loginUser.userName ?? '无名' }}
+          </a-space>
+          <template #overlay>
+            <a-menu>
+              <a-menu-item @click="doLogOut">
+                <LogoutOutlined />
+                退出登陆
+              </a-menu-item>
+            </a-menu>
+          </template>
+        </a-dropdown>
       </div>
       <div v-else>
         <a-button type="primary" href="/user/login">登录</a-button>

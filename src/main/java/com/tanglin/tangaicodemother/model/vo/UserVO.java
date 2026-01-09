@@ -1,5 +1,6 @@
 package com.tanglin.tangaicodemother.model.vo;
 
+import com.fasterxml.jackson.annotation.JsonFormat;
 import lombok.Data;
 
 import java.io.Serializable;
@@ -19,6 +20,8 @@ public class UserVO implements Serializable {
     /**
      * id
      */
+    // 解决JS 数字精度问题 json long化为string
+    @JsonFormat(shape = JsonFormat.Shape.STRING)
     private Long id;
 
     /**
