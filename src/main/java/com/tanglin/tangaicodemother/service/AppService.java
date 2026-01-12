@@ -11,6 +11,7 @@ import com.tanglin.tangaicodemother.model.dto.app.AppUpdateMyRequest;
 import com.tanglin.tangaicodemother.model.entity.App;
 import com.tanglin.tangaicodemother.model.entity.User;
 import com.tanglin.tangaicodemother.model.vo.AppVO;
+import reactor.core.publisher.Flux;
 
 /**
  * 应用 服务层。
@@ -68,4 +69,6 @@ public interface AppService extends IService<App> {
      * 管理员分页查询应用
      */
     Page<AppVO> listAdminAppVOByPage(AppAdminQueryRequest queryRequest);
+
+    Flux<String> chatToGenCode(Long appId,String message,User loginUser);
 }

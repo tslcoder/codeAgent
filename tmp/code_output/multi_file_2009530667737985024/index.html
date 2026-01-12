@@ -1,0 +1,31 @@
+index.html
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任务记录器</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header class="header">
+        <h1>📝 任务记录器</h1>
+        <form id="task-form" class="task-form">
+            <input type="text" id="task-input" class="task-input" placeholder="输入新任务..." required>
+            <button type="submit" class="btn add-btn">添加</button>
+        </form>
+    </header>
+
+    <main class="container">
+        <div class="filter-buttons">
+            <button class="btn filter active" data-filter="all">全部</button>
+            <button class="btn filter" data-filter="active">进行中</button>
+            <button class="btn filter" data-filter="completed">已完成</button>
+        </div>
+
+        <ul id="task-list" class="task-list"></ul>
+    </main>
+
+    <script src="script.js"></script>
+</body>
+</html>

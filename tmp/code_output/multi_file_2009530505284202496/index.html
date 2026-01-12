@@ -1,0 +1,92 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任务记录管理系统</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+<body>
+    <header>
+        <nav class="navbar">
+            <div class="logo">任务记录</div>
+            <ul class="nav-links">
+                <li><a href="#home">首页</a></li>
+                <li><a href="#tasks">任务列表</a></li>
+                <li><a href="#add-task">添加任务</a></li>
+                <li><a href="#contact">联系</a></li>
+            </ul>
+        </nav>
+    </header>
+
+    <main>
+        <section id="home" class="hero">
+            <h1>高效任务管理</h1>
+            <p>记录和跟踪您的每日任务，提升工作效率</p>
+        </section>
+
+        <section id="tasks" class="task-section">
+            <h2>当前任务列表</h2>
+            <div class="table-container">
+                <table id="taskTable">
+                    <thead>
+                        <tr>
+                            <th>标题</th>
+                            <th>描述</th>
+                            <th>截止日期</th>
+                            <th>状态</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        <tr>
+                            <td>示例任务1</td>
+                            <td>这是一个示例任务描述</td>
+                            <td>2023-12-31</td>
+                            <td>进行中</td>
+                        </tr>
+                    </tbody>
+                </table>
+            </div>
+        </section>
+
+        <section id="add-task" class="add-task-section">
+            <h2>添加新任务</h2>
+            <form id="taskForm">
+                <div class="form-group">
+                    <label for="title">任务标题:</label>
+                    <input type="text" id="title" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">任务描述:</label>
+                    <textarea id="description" required></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="deadline">截止日期:</label>
+                    <input type="date" id="deadline" required>
+                </div>
+                <button type="submit">添加任务</button>
+            </form>
+        </section>
+
+        <section id="contact" class="contact-section">
+            <h2>联系我们</h2>
+            <div class="contact-content">
+                <img src="https://picsum.photos/800/600" alt="团队图片">
+                <div class="contact-info">
+                    <p>如果您有任何疑问或需要帮助，请随时联系我们。</p>
+                    <address>
+                        Email: support@example.com<br>
+                        电话: 123-456-7890
+                    </address>
+                </div>
+            </div>
+        </section>
+    </main>
+
+    <footer>
+        <p>&copy; 2023 任务记录系统. 保留所有权利。</p>
+    </footer>
+
+    <script src="script.js"></script>
+</body>
+</html>

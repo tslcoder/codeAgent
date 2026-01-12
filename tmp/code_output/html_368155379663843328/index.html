@@ -1,0 +1,300 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>任务记录工具</title>
+    <style>
+        /* 基础样式 */
+        :root {
+            --primary-color: #4CAF50;
+            --bg-color: #f4f4f4;
+            --text-color: #333;
+        }
+
+        body {
+            font-family: 'Segoe UI', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+        }
+
+        header {
+            background-color: var(--primary-color);
+            color: white;
+            padding: 1.5rem;
+            text-align: center;
+        }
+
+        main {
+            flex: 1;
+            padding: 1rem;
+            max-width: 800px;
+            margin: 0 auto;
+        }
+
+        /* 任务输入表单样式 */
+        .task-form {
+            display: flex;
+            flex-wrap: wrap;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .task-form input {
+            flex: 1 1 200px;
+            padding: 0.5rem;
+            border: 2px solid #ddd;
+            border-radius: 4px;
+        }
+
+        .task-form button {
+            padding: 0.5rem 1rem;
+            background-color: var(--primary-color);
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .task-form button:hover {
+            background-color: #45a049;
+        }
+
+        /* 过滤按钮样式 */
+        .filter-buttons {
+            display: flex;
+            justify-content: center;
+            gap: 0.5rem;
+            margin-bottom: 1.5rem;
+        }
+
+        .filter-buttons button {
+            padding: 0.3rem 0.8rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+            background-color: #eee;
+            color: #333;
+        }
+
+        .filter-buttons button.active {
+            background-color: var(--primary-color);
+            color: white;
+        }
+
+        /* 任务列表样式 */
+        .task-list {
+            list-style: none;
+            padding: 0;
+            margin: 0;
+        }
+
+        .task-item {
+            background-color: white;
+            padding: 0.8rem;
+            border-radius: 4px;
+            margin-bottom: 0.5rem;
+            display: flex;
+            flex-wrap: wrap;
+            align-items: center;
+            justify-content: space-between;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+        }
+
+        .task-item.completed .task-text {
+            text-decoration: line-through;
+            color: #999;
+        }
+
+        .task-text {
+            flex: 1 1 200px;
+            margin-right: 1rem;
+            word-break: break-word;
+        }
+
+        .task-actions {
+            display: flex;
+            gap: 0.5rem;
+        }
+
+        .task-actions button {
+            padding: 0.3rem 0.6rem;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+        .complete-btn {
+            background-color: #2196F3;
+            color: white;
+        }
+
+        .delete-btn {
+            background-color: #f44336;
+            color: white;
+        }
+
+        /* 响应式设计 */
+        @media (max-width: 600px) {
+            .task-form {
+                flex-direction: column;
+                align-items: stretch;
+            }
+
+            .task-item {
+                flex-direction: column;
+                align-items: flex-start;
+            }
+
+            .task-actions {
+                margin-top: 0.5rem;
+                justify-content: flex-end;
+                width: 100%;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <h1>任务记录工具</h1>
+    </header>
+
+    <main>
+        <!-- 任务输入表单 -->
+        <div class="task-form">
+            <input type="text" id="taskInput" placeholder="输入新任务..." />
+            <button onclick="addTask()">添加任务</button>
+        </div>
+
+        <!-- 过滤按钮 -->
+        <div class="filter-buttons">
+            <button onclick="filterTasks('all')" class="active">全部</button>
+            <button onclick="filterTasks('active')">未完成</button>
+            <button onclick="filterTasks('completed')">已完成</button>
+        </div>
+
+        <!-- 任务列表 -->
+        <ul class="task-list" id="taskList">
+            <!-- 任务项将通过JavaScript动态添加 -->
+        </ul>
+    </main>
+
+    <script>
+        // 初始化任务数组
+        let tasks = JSON.parse(localStorage.getItem('tasks') || '[]');
+        let currentFilter = 'all';
+
+        // 初始化页面
+        document.addEventListener('DOMContentLoaded', () => {
+            renderTasks();
+        });
+
+        // 添加任务函数
+        function addTask() {
+            const input = document.getElementById('taskInput');
+            const text = input.value.trim();
+            if (text === '') return;
+
+            tasks.push({ text, completed: false });
+            input.value = '';
+            saveTasks();
+            renderTasks();
+        }
+
+        // 渲染任务列表
+        function renderTasks() {
+            const taskList = document.getElementById('taskList');
+            taskList.innerHTML = '';
+            
+            const filteredTasks = tasks.filter(task => {
+                if (currentFilter === 'completed') return task.completed;
+                if (currentFilter === 'active') return !task.completed;
+                return true;
+            });
+
+            filteredTasks.forEach((task, index) => {
+                const li = document.createElement('li');
+                li.className = 'task-item ' + (task.completed ? 'completed' : '');
+                
+                const div = document.createElement('div');
+                div.className = 'task-text';
+                div.textContent = task.text;
+
+                const actions = document.createElement('div');
+                actions.className = 'task-actions';
+
+                // 完成按钮
+                const completeBtn = document.createElement('button');
+                completeBtn.className = 'complete-btn';
+                completeBtn.textContent = task.completed ? '撤销' : '完成';
+                completeBtn.onclick = () => toggleTask(index);
+
+                // 删除按钮
+                const deleteBtn = document.createElement('button');
+                deleteBtn.className = 'delete-btn';
+                deleteBtn.textContent = '删除';
+                deleteBtn.onclick = () => deleteTask(index);
+
+                actions.appendChild(completeBtn);
+                actions.appendChild(deleteBtn);
+                li.appendChild(div);
+                li.appendChild(actions);
+                taskList.appendChild(li);
+            });
+
+            // 如果没有任务显示提示
+            if (filteredTasks.length === 0) {
+                const empty = document.createElement('li');
+                empty.textContent = '暂无任务';
+                empty.style.textAlign = 'center';
+                empty.style.padding = '2rem';
+                empty.style.color = '#888';
+                taskList.appendChild(empty);
+            }
+        }
+
+        // 切换任务状态
+        function toggleTask(index) {
+            tasks[index].completed = !tasks[index].completed;
+            saveTasks();
+            renderTasks();
+        }
+
+        // 删除任务
+        function deleteTask(index) {
+            if (confirm('确定要删除这个任务吗？')) {
+                tasks.splice(index, 1);
+                saveTasks();
+                renderTasks();
+            }
+        }
+
+        // 保存到localStorage
+        function saveTasks() {
+            localStorage.setItem('tasks', JSON.stringify(tasks));
+        }
+
+        // 过滤任务
+        function filterTasks(filterType) {
+            currentFilter = filterType;
+            document.querySelectorAll('.filter-buttons button').forEach(btn => {
+                btn.classList.remove('active');
+            });
+            event.target.classList.add('active');
+            renderTasks();
+        }
+
+        // 添加键盘事件 - 按下回车键添加任务
+        document.getElementById('taskInput').addEventListener('keypress', function(e) {
+            if (e.key === 'Enter') {
+                addTask();
+            }
+        });
+    </script>
+</body>
+</html>
