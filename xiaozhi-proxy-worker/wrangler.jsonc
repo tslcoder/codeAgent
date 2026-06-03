@@ -1,0 +1,5 @@
+{
+  "name": "codeagent",
+  "main": "worker/index.js",
+  "compatibility_date": "2026-06-03"
+}
