@@ -1,0 +1,14 @@
+{
+  "$schema": "node_modules/wrangler/config-schema.json",
+  "name": "codeagent",
+  "compatibility_date": "2026-06-03",
+  "observability": {
+    "enabled": true
+  },
+  "assets": {
+    "directory": "tang-ai-code-mother-fronted"
+  },
+  "compatibility_flags": [
+    "nodejs_compat"
+  ]
+}
